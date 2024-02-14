@@ -71,4 +71,19 @@ public class EnemyGuard : MonoBehaviour
             isChasing = true;
         }
     }
+
+    // Upon touching an object of death, enemy guard shall perish horribly.
+    void OnCollisionEnter(Collision collision)
+    {
+        // If more than one object, check using switch.
+        if (collision.gameObject.CompareTag("Lava"))
+        {
+            Die();
+        }
+
+        void Die()
+        {
+            Destroy(this.gameObject);
+        }
+    }
 }
