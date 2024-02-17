@@ -57,13 +57,7 @@ public class ThirdPersonMovement : MonoBehaviour
     
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.CompareTag("Lava"))
-        {
-            UnityEngine.Debug.Log("Touch!");
-            Destroy(this.gameObject);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-        else if (collision.collider.CompareTag("Enemy"))
+        if (collision.collider.CompareTag("Enemy"))
         {
             UnityEngine.Debug.Log("Touch 2!");
         }
