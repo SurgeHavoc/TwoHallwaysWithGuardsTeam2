@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public int remainingGuards = 2;
-    //public float rotationSpeed = 3f;
     public Vector3 openRotation = new Vector3(0, -110, 90);
 
     private bool isOpening = false;
@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
 
     AudioSource WinAudio;
 
+    public TextMeshProUGUI guardsRemainingText;
+
     private void Start()
     {
         guards = new List<GameObject>(GameObject.FindGameObjectsWithTag("Enemy"));
@@ -23,11 +25,15 @@ public class GameManager : MonoBehaviour
         door2 = GameObject.Find("gate_low_textured (1)");
 
         WinAudio = GetComponent<AudioSource>();
+
+        UpdateGuardsRemainingText();
     }
 
     public void GuardDied(GameObject guard)
     {
         guards.Remove(guard);
+        UpdateGuardsRemainingText();
+        GuardZeroCountCheck();
         if(guards.Count == 0 && !isOpening)
         {
             isOpening = true;
@@ -54,6 +60,24 @@ public class GameManager : MonoBehaviour
             door.transform.rotation = Quaternion.Euler(0.0f, newRotation, 90f);
             door2.transform.rotation = Quaternion.Euler(0.0f, newRotation2, 90f);
             yield return null;
+        }
+    }
+
+    private void UpdateGuardsRemainingText()
+    {
+        guardsRemainingText.text = "Guards remaining: " + guards.Count;
+    }
+
+    private void LevelCompleteUpdateGuardsRemainingText()
+    {
+        guardsRemainingText.text = "Level Complete!";
+    }
+
+    public void GuardZeroCountCheck()
+    {
+        if(guards.Count == 0)
+        {
+            LevelCompleteUpdateGuardsRemainingText();
         }
     }
 }
