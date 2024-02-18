@@ -16,11 +16,19 @@ public class ThirdPersonMovement : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
 
+    Animator animator;
+
     Vector3 velocity;
     bool isGrounded;
 
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -48,6 +56,7 @@ public class ThirdPersonMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            animator.SetBool("IsJumping", true);
         }
 
         velocity.y += gravity * Time.deltaTime;
