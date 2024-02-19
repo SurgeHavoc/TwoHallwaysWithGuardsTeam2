@@ -67,7 +67,7 @@ public class ThirdPersonMovement : MonoBehaviour
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDir.normalized * speed * Time.deltaTime); // Move character controller.
-            animator.SetBool("isWalking", true);
+            animator.SetBool("IsWalking", true);
         }
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
