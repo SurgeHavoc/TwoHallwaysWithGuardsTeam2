@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static System.Net.Mime.MediaTypeNames;
 
 public class GlobalEscape : MonoBehaviour
 {
@@ -13,14 +14,9 @@ public class GlobalEscape : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-    
-    void escapeTheGame()
-    {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKey("escape"))
         {
-            Application.Quit();
+            UnityEngine.Application.Quit();
         }
     }
 }

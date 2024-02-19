@@ -18,6 +18,7 @@ public class ThirdPersonMovement : MonoBehaviour
 
     Vector3 velocity;
     bool isGrounded;
+    bool IsWalking;
 
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
@@ -36,6 +37,21 @@ public class ThirdPersonMovement : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
+<<<<<<< Updated upstream
+=======
+        // Logic to handle walking.
+        bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
+        bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
+        // bool isWalking = hasHorizontalInput || hasVerticalInput;
+        // animator.SetBool("IsWalking", isWalking);
+
+        if(animator.GetBool("IsWalking") == false)
+        {
+            animator.SetBool("IsIdle", true);
+        }
+
+        // If moving.
+>>>>>>> Stashed changes
         if (direction.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
@@ -43,11 +59,31 @@ public class ThirdPersonMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            controller.Move(moveDir.normalized * speed * Time.deltaTime);
+            controller.Move(moveDir.normalized * speed * Time.deltaTime); // Move character controller.
+            animator.SetBool("isWalking", true);
         }
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+<<<<<<< Updated upstream
+=======
+            animator.SetBool("IsJumping", true);
+        }
+        else
+        {
+            animator.SetBool("IsJumping", false);
+        }
+
+        // If press Q, use attack animation;
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            animator.SetBool("IsAttacking", true);
+            animator.SetBool("IsIdle", true);
+        }
+        else if(!Input.GetKeyDown(KeyCode.Q))
+        {
+            animator.SetBool("IsAttacking", false);
+>>>>>>> Stashed changes
         }
 
         velocity.y += gravity * Time.deltaTime;
