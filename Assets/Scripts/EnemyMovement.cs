@@ -16,11 +16,16 @@ public class EnemyMovement : MonoBehaviour
 
     private GameManager gM;
 
+    Animator anim;
+
     void OnTriggerEnter(Collider other)
     {
         if (other.transform == player)
         {
             m_IsPlayerInRange = true;
+
+            // On player enter range, play animation.
+            anim.SetBool("IsAttacking", true);
         }
     }
 
@@ -29,6 +34,9 @@ public class EnemyMovement : MonoBehaviour
         if (other.transform == player)
         {
             m_IsPlayerInRange = false;
+
+            // On player exit range, stop playing animation.
+            anim.SetBool("IsAttacking", false);
         }
     }
 
@@ -49,8 +57,11 @@ public class EnemyMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Make sure you get Animator so that the script has context as to what Animator is.
+        anim = GetComponent<Animator>();
         gM = GameObject.Find("GameManager").GetComponent<GameManager>();
         navMeshAgent.SetDestination(waypoints[0].position);
+        anim.SetBool("IsAttacking", false);
     }
 
     // Update is called once per frame

@@ -814,7 +814,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackForce: 15
-  raycastOffset: -2
+  raycastOffset: -5.5
 --- !u!114 &2679394235012593922
 MonoBehaviour:
   m_ObjectHideFlags: 0

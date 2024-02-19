@@ -21,6 +21,7 @@ public class ThirdPersonMovement : MonoBehaviour
 
     Vector3 velocity;
     bool isGrounded;
+    bool IsWalking;
 
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
@@ -49,14 +50,15 @@ public class ThirdPersonMovement : MonoBehaviour
         // Logic to handle walking.
         bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
         bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
-        bool isWalking = hasHorizontalInput || hasVerticalInput;
-        animator.SetBool("IsWalking", isWalking);
+        // bool isWalking = hasHorizontalInput || hasVerticalInput;
+        // animator.SetBool("IsWalking", isWalking);
 
         if(animator.GetBool("IsWalking") == false)
         {
             animator.SetBool("IsIdle", true);
         }
 
+        // If moving.
         if (direction.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
@@ -64,7 +66,8 @@ public class ThirdPersonMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            controller.Move(moveDir.normalized * speed * Time.deltaTime);
+            controller.Move(moveDir.normalized * speed * Time.deltaTime); // Move character controller.
+            animator.SetBool("isWalking", true);
         }
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -76,6 +79,7 @@ public class ThirdPersonMovement : MonoBehaviour
             animator.SetBool("IsJumping", false);
         }
 
+        // If press Q, use attack animation;
         if (Input.GetKeyDown(KeyCode.Q))
         {
             animator.SetBool("IsAttacking", true);

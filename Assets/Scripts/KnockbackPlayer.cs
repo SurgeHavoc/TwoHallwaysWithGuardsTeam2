@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class KnockbackPlayer : MonoBehaviour
 {
-    public float knockbackForce = 10f;
+    public float knockbackForce = 5f;
     public float knockbackDuration = 0.2f;
 
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.CompareTag("Player"))
         {
+            // Set direction of knockback;
             Vector3 knockbackDirection = (collision.transform.position - transform.position).normalized;
 
+            // Affects charactercontroller of player.
             CharacterController playerController = collision.gameObject.GetComponent<CharacterController>();
             if(playerController != null)
             {
