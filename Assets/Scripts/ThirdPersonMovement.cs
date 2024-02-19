@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,8 +14,8 @@ public class ThirdPersonMovement : MonoBehaviour
     public float jumpHeight = 3f;
 
     public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
+    public float groundDistance = 0.4f; // For checking the distance between the character and ground;
+    public LayerMask groundMask; // For checking for ground to jump.
 
     Animator animator;
 
@@ -33,6 +34,7 @@ public class ThirdPersonMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Uses a sphere to check if grounded or not.
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if(isGrounded && velocity.y < 0)
@@ -43,6 +45,17 @@ public class ThirdPersonMovement : MonoBehaviour
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+
+        // Logic to handle walking.
+        bool hasHorizontalInput = !Mathf.Approximately(horizontal, 0f);
+        bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
+        bool isWalking = hasHorizontalInput || hasVerticalInput;
+        animator.SetBool("IsWalking", isWalking);
+
+        if(animator.GetBool("IsWalking") == false)
+        {
+            animator.SetBool("IsIdle", true);
+        }
 
         if (direction.magnitude >= 0.1f)
         {
@@ -58,27 +71,35 @@ public class ThirdPersonMovement : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             animator.SetBool("IsJumping", true);
         }
+        else
+        {
+            animator.SetBool("IsJumping", false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            animator.SetBool("IsAttacking", true);
+            animator.SetBool("IsIdle", true);
+        }
+        else if(!Input.GetKeyDown(KeyCode.Q))
+        {
+            animator.SetBool("IsAttacking", false);
+        }
 
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
-    }
-    
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.CompareTag("Enemy"))
-        {
-            UnityEngine.Debug.Log("Touch 2!");
-        }
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if(hit.collider.CompareTag("Lava"))
         {
-            UnityEngine.Debug.Log("Touch!");
-            Destroy(this.gameObject);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        else if(hit.collider.CompareTag("Level_Exit"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 }
