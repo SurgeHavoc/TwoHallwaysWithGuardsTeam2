@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMeleeAttack : MonoBehaviour
 {
     public float knockbackForce = 15.0f; // Knockback force.
-    public float raycastOffset = 0.0f; // Offset to bring the initial position of the raycast back.
+    public float raycastOffset = -2.0f; // Offset to bring the initial position of the raycast back.
 
     AudioSource HitAudio;
 
